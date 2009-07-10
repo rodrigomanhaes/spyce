@@ -1,5 +1,6 @@
 class Bowling(object):
-    _score = 0
+    def __init__(self):
+        self._score = 0
 
     @property
     def score(self):
