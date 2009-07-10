@@ -3,7 +3,7 @@ from bowling import Bowling
 from spyce import description, example
 from should_dsl import should_be
 
-with description(Bowling):
+with description(Bowling) as context:
     bowling = Bowling()
 
     with example("should score 0 for gutter game"):
