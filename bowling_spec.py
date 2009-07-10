@@ -9,3 +9,7 @@ with description(Bowling) as context:
     with example("should score 0 for gutter game"):
         bowling.score |should_be| 0
 
+    with example("should score 13 if I get a spare with 6 and 7"):
+        bowling.hit(6)
+        bowling.hit(7)
+        bowling.score |should_be| 13
