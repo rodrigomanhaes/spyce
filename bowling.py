@@ -1,7 +1,4 @@
 class Bowling(object):
-    
-    def hit(self, pins):
-        pass
-    
+    @property
     def score(self):
         return 0 
