@@ -1,6 +1,7 @@
 # SUT: Context
 import inspect
 import sys
+import re
 
 class description(object):
     def __init__(self, klass):
@@ -43,23 +44,19 @@ class example(object):
 
         setup_method = frame.f_locals.get('setup', None)
         if setup_method:
-#            src = "%s%s\n    %s%s;%s" % (
-#                        ' '*8,
-#                        inspect.getsource(setup_method), 
-#                        ' '*8,
-#                        "self_frame = sys._getframe()", 
-#                        "frame.f_locals.update(self_frame.f_locals)")
-            src = """
-def setup():
-    bowling = Bowling()
-    self_frame = sys._getframe() 
-    frame.f_locals.update(self_frame.f_locals)
-"""
-            tudo = locals()
-            tudo.update(globals())
+            source_code = inspect.getsource(setup_method) 
+            first_indented_line = source_code.split('\n')[1]
+            indented_blanks = re.match(r'^([ ]+)', first_indented_line).group(1)
+            src = "%s\n%s%s;%s" % (
+                        source_code.strip(), 
+                        indented_blanks,
+                        "self_frame = sys._getframe()", 
+                        "frame.f_locals.update(self_frame.f_locals)")
+            tudo = {'setup': setup_method, 'frame': frame}
+            tudo.update({'sys': sys})
             tudo.update(frame.f_globals)
             exec src in tudo
-            setup()
+            tudo['setup']()
 
         return self
         
